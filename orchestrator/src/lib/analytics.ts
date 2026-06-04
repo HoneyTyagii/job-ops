@@ -28,6 +28,7 @@ type OpenPanelTracker = {
 
 declare global {
   interface Window {
+    __JOBOPS_ANALYTICS_DISABLED__?: boolean;
     umami?: UmamiTracker;
     op?: OpenPanelTracker;
   }
@@ -35,6 +36,7 @@ declare global {
 
 export function trackEvent(event: string, data?: Record<string, unknown>) {
   if (typeof window === "undefined") return;
+  if (window.__JOBOPS_ANALYTICS_DISABLED__ === true) return;
   const payload = withAnalyticsMetadata(data as AnalyticsPayload | undefined, {
     analyticsUserId: getEventAnalyticsUserId(),
     appVersion: getAnalyticsAppVersion(),
