@@ -653,9 +653,10 @@ export async function summarizeJob(
 
       // 2. Suggest Projects
       let selectedProjectIds = job.selectedProjectIds;
-      const existingSelectedProjectIds = parseProjectIdsCsv(selectedProjectIds);
       if (shouldUpdateAllTailoring) {
         try {
+          const existingSelectedProjectIds =
+            parseProjectIdsCsv(selectedProjectIds);
           const { catalog, selectionItems } =
             extractProjectsFromProfile(profile);
           const overrideResumeProjectsRaw =
@@ -693,11 +694,10 @@ export async function summarizeJob(
             missingLockedProjectIds.length === 0 &&
             !existingSelectionExceedsMax;
 
-          let picked: string[] = [];
           if (existingSelectionValid && !options?.force) {
             selectedProjectIds = existingSelectedProjectIds.join(",");
           } else {
-            picked = await pickProjectIdsForJob({
+            const picked = await pickProjectIdsForJob({
               jobDescription: job.jobDescription || "",
               eligibleProjects,
               desiredCount,
